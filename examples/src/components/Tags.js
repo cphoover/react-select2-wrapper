@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import Select2 from '../../../src/components/Select2';
-import '../../../css/select2.css';
+// import '../../../css/select2.css';
 
-export default class Tags extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+export default React.createClass({
+  getInitialState() {
+   return {
       value1: ['feature'],
       value2: ['feature'],
       value3: null,
@@ -18,7 +17,7 @@ export default class Tags extends Component {
       data9: ['bug', 'feature', 'documents', 'discussion'],
       placeholder9: 'search by tags',
     };
-  }
+  },
 
   example1() {
     const { value1 } = this.state;
@@ -31,6 +30,7 @@ export default class Tags extends Component {
           value={ value1 }
           options={
             {
+              tags: true,
               placeholder: 'search by tags',
             }
           }
@@ -41,7 +41,7 @@ export default class Tags extends Component {
         </button>
       </div>
     );
-  }
+  },
 
   example2() {
     const { value2 } = this.state;
@@ -70,7 +70,7 @@ export default class Tags extends Component {
         </button>
       </div>
     );
-  }
+  },
 
   example3() {
     const { value3 } = this.state;
@@ -97,7 +97,7 @@ export default class Tags extends Component {
         </button>
       </div>
     );
-  }
+  },
 
   example4() {
     return (
@@ -118,7 +118,7 @@ export default class Tags extends Component {
         />
       </div>
     );
-  }
+  },
 
   example5() {
     return (
@@ -139,7 +139,7 @@ export default class Tags extends Component {
         />
       </div>
     );
-  }
+  },
 
   example6() {
     return (
@@ -160,7 +160,7 @@ export default class Tags extends Component {
         />
       </div>
     );
-  }
+  },
 
   example7() {
     const { data7 } = this.state;
@@ -188,7 +188,7 @@ export default class Tags extends Component {
         </button>
       </div>
     );
-  }
+  },
 
   example8() {
     return (
@@ -213,7 +213,7 @@ export default class Tags extends Component {
         />
       </div>
     );
-  }
+  },
 
   example9() {
     const { placeholder9, data9 } = this.state;
@@ -235,7 +235,7 @@ export default class Tags extends Component {
         </button>
       </div>
     );
-  }
+  },
 
   render() {
     return (
@@ -252,4 +252,4 @@ export default class Tags extends Component {
       </div>
     );
   }
-}
+});

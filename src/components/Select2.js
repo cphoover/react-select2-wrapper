@@ -1,13 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import ReactDOM from 'react-dom';
 import shallowEqualFuzzy from 'shallow-equal-fuzzy';
 import $ from 'jquery';
 import 'select2';
 
 const namespace = 'react-select2-wrapper';
 
-export default class Select2 extends Component {
-  static propTypes = {
+export default React.createClass({
+ propTypes : {
     defaultValue: PropTypes.oneOfType([
       PropTypes.number,
       PropTypes.array,
@@ -27,35 +26,33 @@ export default class Select2 extends Component {
     onSelect: PropTypes.func,
     onChange: PropTypes.func,
     onUnselect: PropTypes.func,
-  };
+  },
 
-  static defaultProps = {
-    data: [],
-    events: [
-      [`change.${namespace}`, 'onChange'],
-      [`select2:open.${namespace}`, 'onOpen'],
-      [`select2:close.${namespace}`, 'onClose'],
-      [`select2:select.${namespace}`, 'onSelect'],
-      [`select2:unselect.${namespace}`, 'onUnselect'],
-    ],
-    options: {},
-    multiple: false,
-  };
-
-  constructor(props) {
-    super(props);
+  getDefaultProps : function () {
     this.el = null;
-  }
+    return {
+      data: [],
+      events: [
+        [`change.${namespace}`, 'onChange'],
+        [`select2:open.${namespace}`, 'onOpen'],
+        [`select2:close.${namespace}`, 'onClose'],
+        [`select2:select.${namespace}`, 'onSelect'],
+        [`select2:unselect.${namespace}`, 'onUnselect'],
+      ],
+      options: {},
+      multiple: false,
+    };
+  },
 
   componentDidMount() {
     this.initSelect2();
-  }
+  },
 
   componentWillReceiveProps(nextProps) {
     if (this.el) {
       this.setValue(this.prepareValue(nextProps.value, this.props.defaultValue));
     }
-  }
+  },
 
   componentDidUpdate(prevProps) {
     if (!shallowEqualFuzzy(prevProps.data, this.props.data)) {
@@ -74,18 +71,18 @@ export default class Select2 extends Component {
       this.detachEventHandlers();
       this.attachEventHandlers();
     }
-  }
+  },
 
   componentWillUnmount() {
     this.destroySelect2();
-  }
+  },
 
   setValue(value) {
     const elVal = this.props.multiple ? this.el.val() || [] : this.el.val();
     if (!shallowEqualFuzzy(elVal, value)) {
       this.el.val(value).trigger('change');
     }
-  }
+  },
 
   prepareValue(value, defaultValue) {
     const issetValue = typeof value !== 'undefined' && value !== null;
@@ -95,7 +92,7 @@ export default class Select2 extends Component {
       return defaultValue;
     }
     return value;
-  }
+  },
 
   prepareOptions(options) {
     const opt = options;
@@ -103,13 +100,13 @@ export default class Select2 extends Component {
       opt.dropdownParent = $(opt.dropdownParent);
     }
     return opt;
-  }
+  },
 
   initSelect2(withCallbacks = true) {
     if (this.el) { return; }
     const { defaultValue, value, options } = this.props;
 
-    this.el = $(ReactDOM.findDOMNode(this));
+    this.el = $(this.getDOMNode());
     this.el.select2(this.prepareOptions(options));
 
     if (withCallbacks) {
@@ -119,7 +116,7 @@ export default class Select2 extends Component {
     if (typeof defaultValue === 'undefined' && typeof value !== 'undefined') {
       this.setValue(value);
     }
-  }
+  },
 
   destroySelect2(withCallbacks = true) {
     if (!this.el) { return; }
@@ -130,7 +127,7 @@ export default class Select2 extends Component {
 
     this.el.select2('destroy');
     this.el = null;
-  }
+  },
 
   attachEventHandlers() {
     this.props.events.forEach(event => {
@@ -138,7 +135,7 @@ export default class Select2 extends Component {
         this.el.on(event[0], this.props[event[1]]);
       }
     });
-  }
+  },
 
   detachEventHandlers() {
     this.props.events.forEach(event => {
@@ -146,12 +143,12 @@ export default class Select2 extends Component {
         this.el.off(event[0]);
       }
     });
-  }
+  },
 
   isObject(value) {
     const type = typeof value;
     return type === 'function' || (value && type === 'object') || false;
-  }
+  },
 
   makeOption(item, k) {
     if (this.isObject(item)) {
@@ -160,7 +157,7 @@ export default class Select2 extends Component {
     }
 
     return (<option key={`option-${k}`} value={item}>{item}</option>);
-  }
+  },
 
   render() {
     const { data, value, ...props } = this.props;
@@ -189,4 +186,4 @@ export default class Select2 extends Component {
       </select>
     );
   }
-}
+});

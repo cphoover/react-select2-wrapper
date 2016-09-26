@@ -171,7 +171,7 @@ export default React.createClass({
     delete props.onUnselect;
 
     return (
-      <select {...props}>
+      <select {...props} style={this.props.style}>
         {data.map((item, k) => {
           if (this.isObject(item) && this.isObject(item.children)) {
             const { children, text, ...itemParams } = item;
